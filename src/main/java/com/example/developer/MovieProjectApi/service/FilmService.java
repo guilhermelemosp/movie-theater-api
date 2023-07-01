@@ -27,6 +27,16 @@ public class FilmService {
         }
 
         public Film updateFilm(Film film) {
-                return filmRepo.save(film);
+                Film existingFilm = filmRepo.findById(film.getId()).orElse(null);
+                if (existingFilm != null) {
+                        existingFilm.setTitle(film.getTitle());
+                        existingFilm.setGender(film.getGender());
+                        existingFilm.setGender(film.getGender());
+                        existingFilm.setMinimumAge(film.getMinimumAge());
+                        existingFilm.setDuration(film.getDuration());
+                        return filmRepo.save(existingFilm);
+                 
+                }
+                return null;
         }
 }
