@@ -19,7 +19,7 @@ public class FilmService {
         }
 
         public Film getFilmById(Long id) {
-                return filmRepo.findById(id).get();
+                return filmRepo.findById(id).orElse(null);
         }
 
         public Film addFilm(Film film) {
