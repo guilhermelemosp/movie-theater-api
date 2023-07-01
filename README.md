@@ -41,9 +41,9 @@ Usuários do tipo (cliente) poderão:
 	- visualizar os ingressos que comprou
 	- sair para a tela de login
 
-Deve existir um sistema de login
+<!-- Deve existir um sistema de login
 	- Deve identificar se o usuário é cliente ou funcionario e direciona-lo para o menu correto
-Deve um cadastro de usuários
+Deve um cadastro de usuários -->
 
 
     MENU INICIAL

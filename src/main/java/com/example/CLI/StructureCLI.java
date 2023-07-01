@@ -1,8 +1,8 @@
-package com.example.developer.MovieProjectApi.controller;
+package com.example.CLI;
 import java.util.Scanner;
-import com.example.developer.MovieProjectApi.controller.utils.Menu;
+import com.example.CLI.utils.Menu;
 
-public class FilmCLI {
+public class StructureCLI {
     private Scanner scanner;
     private Menu menu;
 
@@ -88,9 +88,5 @@ public class FilmCLI {
 
         this.loginPage();
     }
-
-
-
-
     
 }

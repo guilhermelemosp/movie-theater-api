@@ -34,9 +34,16 @@ public class FilmService {
                         existingFilm.setGender(film.getGender());
                         existingFilm.setMinimumAge(film.getMinimumAge());
                         existingFilm.setDuration(film.getDuration());
-                        return filmRepo.save(existingFilm);
-                 
+                        filmRepo.save(existingFilm);
+                        return existingFilm;
                 }
                 return null;
         }
+        public String deleteFilm(Long id) {
+                filmRepo.deleteById(id);
+                return "Removido com sucesso!" + id;
+        }
+
 }
+
+

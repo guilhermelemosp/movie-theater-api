@@ -1,12 +1,20 @@
-package com.example.developer.MovieProjectApi.controller.utils;
-import com.example.developer.MovieProjectApi.controller.FilmCLI;
-
+package com.example.CLI.utils;
 import java.util.Scanner;
+
+import com.example.CLI.StructureCLI;
+import com.example.developer.MovieProjectApi.model.Film;
+
 
 public class Menu {
     private Scanner scanner;
+
+    public void updateFilm(){
+        Film film = new Film();
+       
+    }
+
     public void clientMenu() {
-        FilmCLI filmCLI = new FilmCLI();
+        StructureCLI StructureCLI = new StructureCLI();
         this.scanner = new Scanner(System.in);
             System.out.println("Escolha uma opção: ");
             System.out.println("1 - Comprar Ingressos");
@@ -26,7 +34,7 @@ public class Menu {
                     break;
                 case 6:
                     System.out.println("Saindo para login...");
-                    filmCLI.loginPage();
+                    StructureCLI.loginPage();
                     break;
                 default:
                     System.out.println("Opção inválida!");
@@ -36,7 +44,7 @@ public class Menu {
         }
 
     public void employeeMenu() {
-        FilmCLI filmCLI = new FilmCLI();
+        StructureCLI StructureCLI = new StructureCLI();
         this.scanner = new Scanner(System.in);
             System.out.println("Escolha uma opção: ");
             System.out.println("1 - Cadastrar filme");
@@ -47,7 +55,6 @@ public class Menu {
             switch (option) {
                 case 1:
                     System.out.println("Adicionando filme...");
-
                     break;
                 case 2:
                     System.out.println("Removendo filme...");
@@ -57,7 +64,7 @@ public class Menu {
                     break;
                 case 4:
                     System.out.println("Saindo...");
-                    filmCLI.loginPage();
+                    StructureCLI.loginPage();
                     break;
             }
             
