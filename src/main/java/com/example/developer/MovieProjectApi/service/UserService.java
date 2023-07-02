@@ -29,6 +29,7 @@ public class UserService {
                         if (user.getUsername().equals(username)) {
                                 return user;
                         }
+
                 }
                 return null;
         }

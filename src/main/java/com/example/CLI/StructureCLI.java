@@ -68,27 +68,31 @@ public class StructureCLI {
             return false;
         }
 
-    public void login() {
+    public void login() {        
         scanner.nextLine();
         System.out.println("Digite seu nome de usuário: ");
         String username = scanner.nextLine();
         System.out.println("Digite sua senha: ");
         String password = scanner.nextLine();
         
-        User user = userService.getUserByUsername(username);
+       boolean isAutenticated = authenticateUser(username, password);
 
-        if (user != null && user.getPassword().equals(password)) {
+        if (isAutenticated) {
+            User user = userService.getUserByUsername(username);
+            if(user != null){
             if (user.getRole().equals("Administrador")) {
                 employeeMenu();
-                return;
             } else if (user.getRole().equals("Cliente")) {
                 clientMenu();
-                return;
             }
+            }
+        } else {
+            System.out.println("Nome de usuário ou senha inválidos. Voltando para a página inicial...");
+            loginPage();
         }
-        
-        System.out.println("Usuário ou senha inválidos!");
+    
     }
+    
     
 
     public void cadastroPessoa() {
@@ -115,11 +119,11 @@ public class StructureCLI {
         String option = "";
         switch (optionNumber) {
             case 1:
-                option = "Cliente";
+                option = "Administrador";
                 System.out.println("Cadastrando usuário comum...");
                 break;
             case 2:
-                option = "Administrador";
+                option = "Cliente";
                 System.out.println("Cadastrando administrador...");
                 break;
             default:
