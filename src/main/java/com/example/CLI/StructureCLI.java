@@ -1,9 +1,13 @@
 package com.example.CLI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
 
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.example.CLI.utils.FilmRules;
 import com.example.developer.MovieProjectApi.model.Film;
 import com.example.developer.MovieProjectApi.service.FilmService;
 
@@ -11,9 +15,11 @@ import com.example.developer.MovieProjectApi.service.FilmService;
 public class StructureCLI {
     private Scanner scanner;
     private FilmService filmService;
+    private FilmRules filmRules;
 
-    public StructureCLI(FilmService filmService) {
+    public StructureCLI(FilmService filmService, FilmRules filmRules) {
         this.filmService = filmService;
+        this.filmRules = filmRules;
     }
 
     public void run() {
@@ -125,26 +131,127 @@ public class StructureCLI {
             
     }
 
-    public void cadastraFilme() {    
+    public void cadastraFilme() {
+        String rulesGender[] = this.filmRules.getGender();
+        String rulesTecnology[] = this.filmRules.getTecnologyApplied();
+        int rulesMinimumAge[] = this.filmRules.getMinimumAge();
+        int rulesAvailableSeats = this.filmRules.getAvailableSeats();
+        int rulesValue[] = this.filmRules.getValue();
+
         scanner.nextLine();
         System.out.println("Digite o título do filme: ");
         String title = scanner.nextLine();
+
         System.out.println("Digite o gênero do filme: ");
-        String gender = scanner.nextLine();
+        for(int i = 0; i < rulesGender.length; i++) {
+            System.out.println((i + 1) + " - " + rulesGender[i]);
+        }
+        int genreOption = scanner.nextInt();
+        String gender = rulesGender[genreOption - 1];
+
         System.out.println("Digite a faixa etária do filme: ");
-        int ageRating = scanner.nextInt();
+         for(int i = 0; i < rulesMinimumAge.length; i++) {
+            System.out.println((i + 1) + " - " + rulesMinimumAge[i]);
+        }
+        int ageOption = scanner.nextInt();
+        int minimumAge = rulesMinimumAge[ageOption - 1];
+
         System.out.println("Digite a duração do filme: ");
         int duration = scanner.nextInt();
+        scanner.nextLine();
+
         System.out.println("Digite valor do ingresso: ");
-        int ticketPrice = scanner.nextInt();
-        System.out.println("Digite a tecnologia aplicada no filme: ");
-        String technology = scanner.nextLine();
-        System.out.println("Digite a quantidade de assentos disponíveis: ");
-        int availableSeats = scanner.nextInt();
+           for(int i = 0; i < rulesValue.length; i++) {
+            System.out.println((i + 1) + " - " + rulesValue[i]);
+        }
+        int value = scanner.nextInt();
+        int ticketPrice = rulesValue[value - 1];
         
-        Film film = new Film(title, gender, ageRating, duration, ticketPrice, technology, availableSeats);
+        scanner.nextLine();
+
+        System.out.println("Digite a tecnologia aplicada no filme: ");
+           for(int i = 0; i < rulesTecnology.length; i++) {
+            System.out.println((i + 1) + " - " + rulesTecnology[i]);
+        }
+        int tecnologyOption = scanner.nextInt();
+        String technology = rulesTecnology[tecnologyOption - 1];
+
+        System.out.println("Quantidade padrão de assentos: " + rulesAvailableSeats);
+        int availableSeats = rulesAvailableSeats;
+        scanner.nextLine();
+        System.out.println("Pressione 1 para confirmar os 100 lugares. Caso queira voltar para o Menu principal, pressione 2");
+        int option = scanner.nextInt();
+        switch (option) {
+            case 1:
+                scanner.nextLine();
+                break;
+            case 2:
+                System.out.println("Voltando para o Menu principal...");
+                this.employeeMenu();
+                break;
+            default:
+                System.out.println("Opção inválida!");
+                break;
+        }
+        Film film = new Film(title, gender, minimumAge, duration, ticketPrice, technology, availableSeats);
         filmService.addFilm(film);
-  
+        System.out.println("Filme cadastrado com sucesso!");
+        this.employeeMenu();
+    }
+
+    public void deleteFilm() {
+        scanner.nextLine();
+        System.out.println("Digite o nome do filme que deseja remover: ");
+        String name = scanner.nextLine().toLowerCase();
+
+        List<Film> films = filmService.getAllFilms();
+
+        List<Film> matchingFilms = new ArrayList<>();
+        for (Film film : films) {
+            String filmTitle = film.getTitle().toLowerCase();
+            if (filmTitle.contains(name)) {
+                matchingFilms.add(film);
+            }
+        }
+
+        if (matchingFilms.isEmpty()) {
+            System.out.println("Nenhum filme encontrado com esse nome.");
+        } else {
+            System.out.println("Foram encontrados os seguintes filmes com esses atributos:");
+            for (int i = 0; i < matchingFilms.size(); i++) {
+                Film film = matchingFilms.get(i);
+                System.out.println((i + 1) + " - " + film.getTitle());
+            }
+
+            System.out.println("Digite o número do filme que deseja remover: ");
+            int filmIndex = scanner.nextInt();
+
+            if (filmIndex >= 1 && filmIndex <= matchingFilms.size()) {
+                Film selectedFilm = matchingFilms.get(filmIndex - 1);
+                if (selectedFilm.getAvailableSeats() == 100) {
+                    confirmDeleteFilm(selectedFilm);
+                } else {
+                    System.out.println("OPÇÃO INVÁLIDA - OS INGRESSOS JÁ COMEÇARAM A SER VENDIDOS!");
+                }
+            } else {
+                System.out.println("Opção inválida.");
+            }
+        }
+    }
+
+    private void confirmDeleteFilm(Film film) {
+        System.out.println("Tem certeza que deseja remover o filme \"" + film.getTitle() + "\"?");
+        System.out.println("Digite 1 para confirmar ou 2 para cancelar");
+        int confirmation = scanner.nextInt();
+
+        if (confirmation == 1) {
+            long filmId = film.getId();
+            filmService.deleteFilm(filmId);
+            System.out.println("O filme foi removido com sucesso!");
+        } else {
+            System.out.println("Remoção do filme cancelada!");
+        }
+        this.employeeMenu();
     }
 
 
@@ -162,13 +269,15 @@ public class StructureCLI {
                 cadastraFilme();
                 break;
             case 2:
-            System.out.println("Removendo filme...");
+            this.deleteFilm();
+            this.employeeMenu();
             break;
             case 3:
-                System.out.println("Listando todos os filmes...");
+                System.out.println("Buscando...");
+                this.filmRules.filmList();
+                this.employeeMenu();
                 break;
             case 4:
-                System.out.println("Saindo...");
                 this.loginPage();
                 break;
         }
