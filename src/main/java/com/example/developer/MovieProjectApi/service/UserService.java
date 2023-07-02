@@ -14,12 +14,23 @@ public class UserService {
     @Autowired    
     private UserRepo userRepo;
 
+
      public List<User> getAllUsers() {
                 return userRepo.findAll();
         }
 
         public User getUserById(Long id) {
                 return userRepo.findById(id).orElse(null);
+        }
+
+        public User getUserByUsername(String username) {
+                List<User> users = userRepo.findAll();
+                for (User user : users) {
+                        if (user.getUsername().equals(username)) {
+                                return user;
+                        }
+                }
+                return null;
         }
 
         public User addUser(User user) {
@@ -39,11 +50,11 @@ public class UserService {
                 }
                 return null;
         }
-    
+        
+
          public String deleteUser(Long id) {
                 userRepo.deleteById(id);
                 return "Removido com sucesso!" + id;
         }
-
 }
 

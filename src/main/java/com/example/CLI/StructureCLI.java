@@ -8,18 +8,25 @@ import java.util.Scanner;
 import org.springframework.stereotype.Component;
 
 import com.example.CLI.utils.FilmRules;
+import com.example.CLI.utils.UserRules;
 import com.example.developer.MovieProjectApi.model.Film;
+import com.example.developer.MovieProjectApi.model.User;
 import com.example.developer.MovieProjectApi.service.FilmService;
+import com.example.developer.MovieProjectApi.service.UserService;
 
 @Component
 public class StructureCLI {
     private Scanner scanner;
     private FilmService filmService;
+    private UserService userService;
     private FilmRules filmRules;
+    private UserRules userRules;
 
-    public StructureCLI(FilmService filmService, FilmRules filmRules) {
+    public StructureCLI(FilmService filmService, FilmRules filmRules, UserRules userRules, UserService userService) {
         this.filmService = filmService;
+        this.userService = userService;
         this.filmRules = filmRules;
+        this.userRules = userRules;
     }
 
     public void run() {
@@ -51,26 +58,36 @@ public class StructureCLI {
         return true;
     }
 
+     public boolean authenticateUser(String username, String password) {
+            List<User> users = userService.getAllUsers();
+            for (User user : users) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+            return true;
+            }
+            }
+            return false;
+        }
+
     public void login() {
         scanner.nextLine();
         System.out.println("Digite seu nome de usuário: ");
         String username = scanner.nextLine();
         System.out.println("Digite sua senha: ");
         String password = scanner.nextLine();
-        System.out.println("Logado com sucesso!");
-        if(username.equals("e") || username.equals("c")) {
-           switch (username) {
-               case "c":
-                   this.clientMenu();
-                   break;
-               case "e":
-                   this.employeeMenu();
-                   break;
-               default:
-                   System.out.println("Opção inválida!");
-                   break;
-           }
+        
+        User user = userService.getUserByUsername(username);
+
+        if (user != null && user.getPassword().equals(password)) {
+            if (user.getRole().equals("Administrador")) {
+                employeeMenu();
+                return;
+            } else if (user.getRole().equals("Cliente")) {
+                clientMenu();
+                return;
+            }
         }
+        
+        System.out.println("Usuário ou senha inválidos!");
     }
     
 
@@ -78,25 +95,40 @@ public class StructureCLI {
         scanner.nextLine();
         System.out.println("Digite seu nome: ");
         String name = scanner.nextLine();
+
         System.out.println("Digite seu nome de usuário: ");
         String username = scanner.nextLine();
+
         System.out.println("Digite sua senha: ");
         String password = scanner.nextLine();
+
+        String passwordEncrypted = userRules.encryptPassword(password);
+
         System.out.println("Digite sua idade: ");
         int age = scanner.nextInt();
-        System.out.println("Digite 1 para cadastrar como usuário comum ou 2 para administrador: ");
-        int option = scanner.nextInt();
-        switch (option) {
+        scanner.nextLine();
+        System.out.println("Selecione a opção de cadastro: ");
+        System.out.println("1 - Administrador");
+        System.out.println("2 - Cliente");
+        int optionNumber = scanner.nextInt();
+        scanner.nextLine();
+        String option = "";
+        switch (optionNumber) {
             case 1:
+                option = "Cliente";
                 System.out.println("Cadastrando usuário comum...");
                 break;
             case 2:
+                option = "Administrador";
                 System.out.println("Cadastrando administrador...");
                 break;
             default:
                 System.out.println("Opção inválida!");
+                this.cadastroPessoa();
                 break;
         }
+        User user = new User(name, username, passwordEncrypted, option, age);
+        userService.addUser(user);
         System.out.println("Usuário cadastrado com sucesso!");
 
         this.loginPage();
