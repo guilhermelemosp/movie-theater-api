@@ -14,6 +14,10 @@ public class FilmService {
         @Autowired
         private FilmRepo filmRepo;
 
+        public FilmService(FilmRepo filmRepo) {
+                this.filmRepo = filmRepo;
+        }
+
         public List<Film> getAllFilms() {
                 return filmRepo.findAll();
         }
@@ -41,7 +45,7 @@ public class FilmService {
         }
         public String deleteFilm(Long id) {
                 filmRepo.deleteById(id);
-                return "Removido com sucesso!" + id;
+                return "Filme removido com sucesso!" + id;
         }
 
 }

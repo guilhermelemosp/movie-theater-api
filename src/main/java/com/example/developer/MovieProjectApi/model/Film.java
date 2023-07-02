@@ -24,9 +24,8 @@ public class Film {
     @Column(name = "minimum_age")
     private int minimumAge;
 
-    @NonNull
     @Column(name = "duration")
-    private String duration;
+    private int duration;
 
     @Column(name = "value")
     private int value;
@@ -41,9 +40,9 @@ public class Film {
     public Film() {
     }
 
-    public Film(Long id, @NonNull String title, String gender, int minimumAge, @NonNull String duration, int value,
+    public Film(@NonNull String title, String gender, int minimumAge, int duration, int value,
     @NonNull String tecnologyApplied, int availableSeats) {
-        this.id = id;
+
         this.title = title;
         this.gender = gender;
         this.minimumAge = minimumAge;

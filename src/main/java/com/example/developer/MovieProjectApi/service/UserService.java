@@ -2,11 +2,16 @@ package com.example.developer.MovieProjectApi.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.developer.MovieProjectApi.model.User;
 import com.example.developer.MovieProjectApi.repository.UserRepo;
 
+@Service
 public class UserService {
 
+    @Autowired    
     private UserRepo userRepo;
 
      public List<User> getAllUsers() {
@@ -41,3 +46,4 @@ public class UserService {
         }
 
 }
+
