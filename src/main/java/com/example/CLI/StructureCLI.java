@@ -61,11 +61,15 @@ public class StructureCLI {
      public boolean authenticateUser(String username, String password) {
             List<User> users = userService.getAllUsers();
             for (User user : users) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-            return true;
+            if (user.getUsername().equals(username)) {
+            String encryptedPassword = user.getPassword();
+            String enteredPasswordEncrypted = userRules.encryptPassword(password);
+            if (encryptedPassword.equals(enteredPasswordEncrypted)) {
+                return true;                
             }
             }
-            return false;
+        }
+        return false;
         }
 
     public void login() {        
