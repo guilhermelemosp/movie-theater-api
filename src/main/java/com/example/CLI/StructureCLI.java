@@ -97,8 +97,6 @@ public class StructureCLI {
     
     }
     
-    
-
     public void cadastroPessoa() {
         scanner.nextLine();
         System.out.println("Digite seu nome: ");
@@ -152,7 +150,8 @@ public class StructureCLI {
         int option = scanner.nextInt();
         switch (option) {
             case 1:
-                System.out.println("Comprando ingressos...");                    
+                System.out.println("Comprando ingressos...");          
+                this.buyTickets();         
                 break;
             case 2:
                 System.out.println("Filmes em cartaz para você...");
@@ -170,6 +169,41 @@ public class StructureCLI {
         }
             
     }
+
+    // public void setMoviesByAge(){
+    //     List<Film> films = filmService.getAllFilms();
+    //     for (Film film : films) {
+    //         if(film.getAgeRating() > user.getAge()){
+    //             System.out.println(film.getTitle());
+    //         }
+    //     }
+    // }
+
+    public void buyTickets() {
+        scanner.nextLine();
+        System.out.println("Selecione o filme que deseja comprar ingressos: ");
+        List<Film> films = filmService.getAllFilms();
+        for (Film film : films) {
+            System.out.println(film.getTitle());
+        }
+        String filmTitle = scanner.nextLine();
+        Film film = filmService.getFilmByName(filmTitle);
+        if (film != null) {
+            System.out.println("Digite a quantidade de ingressos que deseja comprar: ");
+            int quantity = scanner.nextInt();
+            if (quantity <= film.getAvailableSeats()) {
+                film.setAvailableSeats(film.getAvailableSeats() - quantity);
+                filmService.updateFilm(film);
+                System.out.println("Ingressos comprados com sucesso!");
+            } else {
+                System.out.println("Não há ingressos suficientes para a quantidade desejada!");
+            }
+        } else {
+            System.out.println("Filme não encontrado!");
+        }
+        
+    }
+
 
     public void cadastraFilme() {
         String rulesGender[] = this.filmRules.getGender();

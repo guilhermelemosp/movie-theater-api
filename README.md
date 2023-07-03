@@ -43,7 +43,7 @@ Usuários do tipo (cliente) poderão: -> FAZER
 
 Deve existir um sistema de login
 	- Deve identificar se o usuário é cliente ou funcionario e direciona-lo para o menu correto
-Deve um cadastro de usuários -> FAZER O CADASTRO DO CLIENTE - IDENTIFICAR SE É USUARIO OU FUNCIONARIO E DIRECIONA-LO PARA O SEU MENU. PEGAR A PARTIR DA OPÇAO DESEJADA DENTRO DO CADASTRO (1 PARA FUNCIONARIO, 2 PARA CLIENTE)
+Deve um cadastro de usuários
 
 
     MENU INICIAL

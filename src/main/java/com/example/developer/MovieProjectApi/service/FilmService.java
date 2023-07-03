@@ -27,6 +27,16 @@ public class FilmService {
                 return filmRepo.findById(id).orElse(null);
         }
 
+        public Film getFilmByName(String name) {
+                List<Film> films = filmRepo.findAll();
+                for (Film film : films) {
+                        if (film.getTitle().equals(name)) {
+                                return film;
+                        }
+                }
+                return null;        
+        }
+
         public Film addFilm(Film film) {
                 return filmRepo.save(film);
         }
