@@ -49,7 +49,11 @@ public class FilmService {
                         existingFilm.setGender(film.getGender());
                         existingFilm.setMinimumAge(film.getMinimumAge());
                         existingFilm.setDuration(film.getDuration());
+                        existingFilm.setValue(film.getValue());
+                        existingFilm.setTecnologyApplied(film.getTecnologyApplied());
+                        existingFilm.setAvailableSeats(film.getAvailableSeats());
                         filmRepo.save(existingFilm);
+
                         return existingFilm;
                 }
                 return null;

@@ -15,13 +15,13 @@ public class TicketsBoughtByUser {
 
     @ManyToOne
     @JoinColumn(name = "movie_id")
-    private Film movie;
+    private Film film;
 
     public TicketsBoughtByUser() {
     }
 
-    public TicketsBoughtByUser(User user, Film movie) {
+    public TicketsBoughtByUser(User user, Film film) {
         this.user = user;
-        this.movie = movie;
+        this.film = film;
     }
 }

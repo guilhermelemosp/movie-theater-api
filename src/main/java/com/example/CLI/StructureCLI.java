@@ -13,6 +13,7 @@ import com.example.developer.MovieProjectApi.model.Film;
 import com.example.developer.MovieProjectApi.model.TicketsBoughtByUser;
 import com.example.developer.MovieProjectApi.model.User;
 import com.example.developer.MovieProjectApi.service.FilmService;
+import com.example.developer.MovieProjectApi.service.TicketsService;
 import com.example.developer.MovieProjectApi.service.UserService;
 
 @Component
@@ -20,13 +21,15 @@ public class StructureCLI {
     private Scanner scanner;
     private FilmService filmService;
     private UserService userService;
+    private TicketsService ticketsService;
     private FilmRules filmRules;
     private UserRules userRules;
     private User currentUser;
 
-    public StructureCLI(FilmService filmService, FilmRules filmRules, UserRules userRules, UserService userService) {
+    public StructureCLI(FilmService filmService, FilmRules filmRules, UserRules userRules, UserService userService, TicketsService ticketsService) {
         this.filmService = filmService;
         this.userService = userService;
+        this.ticketsService = ticketsService;
         this.filmRules = filmRules;
         this.userRules = userRules;
     }
@@ -167,9 +170,29 @@ public class StructureCLI {
             case 2:
                 System.out.println("Filmes em cartaz para você...");
                 this.setMoviesByAge();
+                scanner.nextLine();
+                System.out.println("Pressione 1 para voltar ao Menu principal ou 2 para comprar ingressos...");
+                int optionNumber = scanner.nextInt();
+                scanner.nextLine();
+                if(optionNumber == 1){
+                    this.clientMenu();
+                } else if(optionNumber == 2){
+                    this.buyTickets();
+                } else {
+                    System.out.println("Opção inválida!");
+                    this.clientMenu();
+                }
                 break;
             case 3:
                 System.out.println("Ingressos comprados...");
+                // this.ticketsService.getTicketsByUser(currentUser);
+                scanner.nextLine();
+                System.out.println("Pressione 1 para voltar ao menu...");
+                int optionNumber2 = scanner.nextInt();
+                scanner.nextLine();
+                if(optionNumber2 == 1){
+                    this.clientMenu();
+                }
                 break;
             case 6:
                 System.out.println("Saindo para login...");
@@ -177,6 +200,7 @@ public class StructureCLI {
                 break;
             default:
                 System.out.println("Opção inválida!");
+                this.clientMenu();
                 break;
         }
             
@@ -192,32 +216,49 @@ public class StructureCLI {
         }
     }
 
-    public void buyTickets() {
-        scanner.nextLine();
-        System.out.println("Selecione o filme que deseja comprar ingressos: ");
-        this.setMoviesByAge();
-        String filmTitle = scanner.nextLine();
-        Film film = filmService.getFilmByName(filmTitle);
-        if (film != null) {
-            System.out.println("Digite a quantidade de ingressos que deseja comprar: ");
-            int quantity = scanner.nextInt();
-            if (quantity <= film.getAvailableSeats()) {
-                film.setAvailableSeats(film.getAvailableSeats() - quantity);
-                filmService.updateFilm(film);
-                String username = scanner.nextLine();
-                System.out.println("Ingressos comprados com sucesso!");
-            } else {
-                System.out.println("Não há ingressos suficientes para a quantidade desejada!");
-            }
+   public void buyTickets() {
+    List<Film> films = filmService.getAllFilms();
+    int userAge = currentUser.getAge();
+    System.out.println("Selecione o filme que deseja comprar ingressos: ");
+    for (int i = 0; i < films.size(); i++) {
+        Film film = films.get(i);
+        if (film.getMinimumAge() <= userAge) {
+            System.out.println((i + 1) + " - " + film.getTitle());
         } else {
-            System.out.println("Filme não encontrado!");
+            continue; // Pula para a próxima iteração do loop
         }
-        //     TicketsBoughtByUser ticket = new TicketsBoughtByUser( 
-        //         , filmTitle);
-        // filmService.addFilm(film);
-        System.out.println("Filme cadastrado com sucesso!");
-        this.clientMenu();
     }
+
+    System.out.println("Digite o número correspondente ao filme que deseja comprar ingressos: ");
+    int filmChoice = scanner.nextInt();
+    scanner.nextLine(); // Limpa a quebra de linha após a leitura do inteiro
+
+    if (filmChoice < 1 || filmChoice > films.size()) {
+        System.out.println("Opção inválida!");
+        this.clientMenu();
+        return;
+    }
+
+    Film chosenFilm = films.get(filmChoice - 1);
+    
+    System.out.println("Digite a quantidade de ingressos que deseja comprar: ");
+    int quantity = scanner.nextInt();
+    scanner.nextLine(); // Limpa a quebra de linha após a leitura do inteiro
+
+    if (quantity > chosenFilm.getAvailableSeats()) {
+        System.out.println("Não há ingressos suficientes para a quantidade desejada!");
+    } else {
+        chosenFilm.setAvailableSeats(chosenFilm.getAvailableSeats() - quantity);
+        filmService.updateFilm(chosenFilm);
+        TicketsBoughtByUser ticket = new TicketsBoughtByUser(currentUser, chosenFilm);
+        ticketsService.addTicket(ticket);
+        System.out.println("Ingressos comprados com sucesso!");
+    }
+
+    this.clientMenu();
+}
+
+
 
 
     public void cadastraFilme() {
