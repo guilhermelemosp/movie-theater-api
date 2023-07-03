@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.example.CLI.utils.FilmRules;
 import com.example.CLI.utils.UserRules;
 import com.example.developer.MovieProjectApi.model.Film;
+import com.example.developer.MovieProjectApi.model.TicketsBoughtByUser;
 import com.example.developer.MovieProjectApi.model.User;
 import com.example.developer.MovieProjectApi.service.FilmService;
 import com.example.developer.MovieProjectApi.service.UserService;
@@ -21,6 +22,7 @@ public class StructureCLI {
     private UserService userService;
     private FilmRules filmRules;
     private UserRules userRules;
+    private User currentUser;
 
     public StructureCLI(FilmService filmService, FilmRules filmRules, UserRules userRules, UserService userService) {
         this.filmService = filmService;
@@ -52,11 +54,17 @@ public class StructureCLI {
                 break;
             default:
                 System.out.println("Opção inválida!");
+                this.loginPage();
                 break;
         }
         
         return true;
     }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+    
 
      public boolean authenticateUser(String username, String password) {
             List<User> users = userService.getAllUsers();
@@ -65,10 +73,12 @@ public class StructureCLI {
             String encryptedPassword = user.getPassword();
             String enteredPasswordEncrypted = userRules.encryptPassword(password);
             if (encryptedPassword.equals(enteredPasswordEncrypted)) {
+                currentUser = user;
                 return true;                
             }
             }
         }
+        
         return false;
         }
 
@@ -139,9 +149,10 @@ public class StructureCLI {
 
         this.loginPage();
     }
-    
+
      public void clientMenu() {
         this.scanner = new Scanner(System.in);
+        System.out.println("Olá, " + currentUser.getName() + "\". Seja Bem-Vindo!\"");
         System.out.println("Escolha uma opção: ");
         System.out.println("1 - Comprar Ingressos");
         System.out.println("2 - Filmes em cartaz para você");
@@ -155,6 +166,7 @@ public class StructureCLI {
                 break;
             case 2:
                 System.out.println("Filmes em cartaz para você...");
+                this.setMoviesByAge();
                 break;
             case 3:
                 System.out.println("Ingressos comprados...");
@@ -170,22 +182,20 @@ public class StructureCLI {
             
     }
 
-    // public void setMoviesByAge(){
-    //     List<Film> films = filmService.getAllFilms();
-    //     for (Film film : films) {
-    //         if(film.getAgeRating() > user.getAge()){
-    //             System.out.println(film.getTitle());
-    //         }
-    //     }
-    // }
+    public void setMoviesByAge(){
+        List<Film> films = filmService.getAllFilms();
+        int userAge = currentUser.getAge();
+        for (Film film : films) {
+            if(film.getMinimumAge() <= userAge){
+                System.out.println(film.getTitle());
+            }
+        }
+    }
 
     public void buyTickets() {
         scanner.nextLine();
         System.out.println("Selecione o filme que deseja comprar ingressos: ");
-        List<Film> films = filmService.getAllFilms();
-        for (Film film : films) {
-            System.out.println(film.getTitle());
-        }
+        this.setMoviesByAge();
         String filmTitle = scanner.nextLine();
         Film film = filmService.getFilmByName(filmTitle);
         if (film != null) {
@@ -194,6 +204,7 @@ public class StructureCLI {
             if (quantity <= film.getAvailableSeats()) {
                 film.setAvailableSeats(film.getAvailableSeats() - quantity);
                 filmService.updateFilm(film);
+                String username = scanner.nextLine();
                 System.out.println("Ingressos comprados com sucesso!");
             } else {
                 System.out.println("Não há ingressos suficientes para a quantidade desejada!");
@@ -201,7 +212,11 @@ public class StructureCLI {
         } else {
             System.out.println("Filme não encontrado!");
         }
-        
+        //     TicketsBoughtByUser ticket = new TicketsBoughtByUser( 
+        //         , filmTitle);
+        // filmService.addFilm(film);
+        System.out.println("Filme cadastrado com sucesso!");
+        this.clientMenu();
     }
 
 
@@ -331,6 +346,7 @@ public class StructureCLI {
 
     public void employeeMenu() {
         this.scanner = new Scanner(System.in);
+        System.out.println("Olá, " + currentUser.getName() + "\". Seja Bem-Vindo!\"");
         System.out.println("Escolha uma opção: ");
         System.out.println("1 - Cadastrar filme");
         System.out.println("2 - Excluir filme");
