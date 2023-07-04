@@ -143,7 +143,7 @@ public class StructureCLI {
                 break;
             default:
                 System.out.println("Opção inválida!");
-                this.cadastroPessoa();
+                this.loginPage();
                 break;
         }
         User user = new User(name, username, passwordEncrypted, option, age);
@@ -155,7 +155,7 @@ public class StructureCLI {
 
      public void clientMenu() {
         this.scanner = new Scanner(System.in);
-        System.out.println("Olá, " + currentUser.getName() + "\". Seja Bem-Vindo!\"");
+        System.out.println("Olá, " + currentUser.getName() + ". Seja Bem-Vindo!");
         System.out.println("Escolha uma opção: ");
         System.out.println("1 - Comprar Ingressos");
         System.out.println("2 - Filmes em cartaz para você");
@@ -185,12 +185,15 @@ public class StructureCLI {
                 break;
             case 3:
                 System.out.println("Ingressos comprados...");
-                // this.ticketsService.getTicketsByUser(currentUser);
+                this.ticketsService.getTicketsByUser(currentUser);
                 scanner.nextLine();
                 System.out.println("Pressione 1 para voltar ao menu...");
                 int optionNumber2 = scanner.nextInt();
                 scanner.nextLine();
                 if(optionNumber2 == 1){
+                    this.clientMenu();
+                } else {
+                    System.out.println("Opção inválida!");
                     this.clientMenu();
                 }
                 break;
@@ -231,7 +234,7 @@ public class StructureCLI {
 
     System.out.println("Digite o número correspondente ao filme que deseja comprar ingressos: ");
     int filmChoice = scanner.nextInt();
-    scanner.nextLine(); // Limpa a quebra de linha após a leitura do inteiro
+    scanner.nextLine();
 
     if (filmChoice < 1 || filmChoice > films.size()) {
         System.out.println("Opção inválida!");
@@ -243,8 +246,7 @@ public class StructureCLI {
     
     System.out.println("Digite a quantidade de ingressos que deseja comprar: ");
     int quantity = scanner.nextInt();
-    scanner.nextLine(); // Limpa a quebra de linha após a leitura do inteiro
-
+    scanner.nextLine();
     if (quantity > chosenFilm.getAvailableSeats()) {
         System.out.println("Não há ingressos suficientes para a quantidade desejada!");
     } else {
@@ -257,9 +259,6 @@ public class StructureCLI {
 
     this.clientMenu();
 }
-
-
-
 
     public void cadastraFilme() {
         String rulesGender[] = this.filmRules.getGender();
@@ -387,7 +386,7 @@ public class StructureCLI {
 
     public void employeeMenu() {
         this.scanner = new Scanner(System.in);
-        System.out.println("Olá, " + currentUser.getName() + "\". Seja Bem-Vindo!\"");
+        System.out.println("Olá, " + currentUser.getName() + ". Seja Bem-Vindo!");
         System.out.println("Escolha uma opção: ");
         System.out.println("1 - Cadastrar filme");
         System.out.println("2 - Excluir filme");

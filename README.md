@@ -34,11 +34,11 @@ Usuários do tipo (funcionário) poderão
 	- listas os filmes em cartaz
 	- sair para a tela de login
 
-Usuários do tipo (cliente) poderão: -> FAZER
+Usuários do tipo (cliente) poderão:
 	- comprar ingressos no sistema
 	- listas os filmes em cartaz
 		• a listagem deve retornar somente os filme de acordo com a classificação indicativa especificada
-	- visualizar os ingressos que comprou
+	- visualizar os ingressos que comprou -> FAZER
 	- sair para a tela de login
 
 Deve existir um sistema de login

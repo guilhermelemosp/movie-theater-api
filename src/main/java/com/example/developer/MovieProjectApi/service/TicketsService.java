@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.developer.MovieProjectApi.model.TicketsBoughtByUser;
+import com.example.developer.MovieProjectApi.model.User;
 import com.example.developer.MovieProjectApi.repository.TicketsRepo;
 
 @Service
@@ -28,6 +29,10 @@ public class TicketsService {
 
     public TicketsBoughtByUser addTicket(TicketsBoughtByUser ticket) {
         return ticketsRepo.save(ticket);
+    }
+
+    public List<TicketsBoughtByUser> getTicketsByUser(User user) {
+        return ticketsRepo.findByUser(user);
     }
 }
 
