@@ -40,7 +40,6 @@ public class StructureCLI {
 
     public boolean loginPage() {
         this.scanner = new Scanner(System.in);
-
         System.out.println("Bem vindo ao app de filmes!");
         System.out.println("Escolha uma opção: ");
         System.out.println("1 - Login");
@@ -160,7 +159,7 @@ public class StructureCLI {
         System.out.println("1 - Comprar Ingressos");
         System.out.println("2 - Filmes em cartaz para você");
         System.out.println("3 - Ingressos comprados");
-        System.out.println("6 - Sair para login");
+        System.out.println("4 - Sair para login");
         int option = scanner.nextInt();
         switch (option) {
             case 1:
@@ -184,20 +183,15 @@ public class StructureCLI {
                 }
                 break;
             case 3:
-                System.out.println("Ingressos comprados...");
-                this.ticketsService.getTicketsByUser(currentUser);
-                scanner.nextLine();
-                System.out.println("Pressione 1 para voltar ao menu...");
-                int optionNumber2 = scanner.nextInt();
-                scanner.nextLine();
-                if(optionNumber2 == 1){
-                    this.clientMenu();
-                } else {
-                    System.out.println("Opção inválida!");
-                    this.clientMenu();
-                }
+                this.ticketsService.getTicketsByUser(currentUser).thenRunAsync(() -> {
+                System.out.println("Digite qualquer tecla para voltar ao menu principal e pressione ENTER:");
+                scanner.next();
+                this.clientMenu();
+                });;
+                // scanner.nextLine();
+                // this.clientMenu();
                 break;
-            case 6:
+            case 4:
                 System.out.println("Saindo para login...");
                 this.loginPage();
                 break;

@@ -11,6 +11,7 @@ import com.example.developer.MovieProjectApi.model.User;
 @Repository
 public interface TicketsRepo extends JpaRepository<TicketsBoughtByUser, Long> {
     List<TicketsBoughtByUser> findByUser(User user);
+    List<TicketsBoughtByUser> findByFilmId(Long filmId);
 }
 
 
