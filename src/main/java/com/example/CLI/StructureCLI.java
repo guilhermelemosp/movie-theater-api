@@ -246,7 +246,8 @@ public class StructureCLI {
     } else {
         chosenFilm.setAvailableSeats(chosenFilm.getAvailableSeats() - quantity);
         filmService.updateFilm(chosenFilm);
-        TicketsBoughtByUser ticket = new TicketsBoughtByUser(currentUser, chosenFilm);
+        TicketsBoughtByUser ticket = new TicketsBoughtByUser(currentUser, chosenFilm, quantity);
+        ticket.setTicketsQuantity(quantity);
         ticketsService.addTicket(ticket);
         System.out.println("Ingressos comprados com sucesso!");
     }
