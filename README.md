@@ -1,9 +1,6 @@
-EXERCÍCIO SEMANA 4
-
-
 Sistema de venda de ingressos
 
-
+OBS: SISTEMA E CONSTRUÇÃO SIMPLES FEITA SOMENTE PARA RODAR NO TERMINAL!
 
 Devemos construir um sistema para realização de venda de ingressos:
 Osistema tera as seguintes funcionalidades:
