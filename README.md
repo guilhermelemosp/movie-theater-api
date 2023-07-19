@@ -1,6 +1,10 @@
-Sistema de venda de ingressos
+TICKET SALES SYSTEM
 
-OBS: SISTEMA E CONSTRUÇÃO SIMPLES FEITA SOMENTE PARA RODAR NO TERMINAL!
+NOTE: SIMPLE SYSTEM AND CONSTRUCTION MADE ONLY TO RUN IN THE TERMINAL!
+FOR FULLSTACK APPLICATION: https://github.com/guilhermelemosp/movie-theater-full-api-html
+
+
+PT:
 
 Devemos construir um sistema para realização de venda de ingressos:
 Osistema tera as seguintes funcionalidades:
